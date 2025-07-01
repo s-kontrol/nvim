@@ -651,6 +651,7 @@ require('lazy').setup({
         -- You can add other tools here that you want Mason to install
         'stylua', -- Used to format Lua code
         'ansiblels', -- ansible
+        { 'bash-language-server', auto_update = true },
         {
           'gopls',
           condition = function()
@@ -658,11 +659,14 @@ require('lazy').setup({
           end,
         },
         {
-          'powershell_ls',
+          'powershell_es',
           condition = function()
             return vim.fn.executable 'pwsh' == 1
           end,
         },
+        -- no extra requirement list
+        'ansiblels', -- ansible
+        'stylua', -- Used to format Lua code
         'dockerls', -- dockerfile
       })
 
