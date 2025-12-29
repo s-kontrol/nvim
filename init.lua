@@ -610,6 +610,21 @@ require('lazy').setup({
         stylua = {}, -- Used to format Lua code
 
         -- Special Lua Config, as recommended by neovim help docs
+        --
+        pylsp = {
+          settings = {
+            pylsp = {
+              plugins = {
+                pycodestyle = { ignore = { 'W391' }, maxLineLength = 100 },
+              },
+            },
+          },
+        },
+        docker_compose_language_service = {
+          filetypes = { 'yaml.docker-compose' },
+          -- Note: 'cmd' and 'root_dir' are usually handled automatically by the native config,
+          -- but you can keep them if you need overrides.
+        },
         lua_ls = {
           on_init = function(client)
             if client.workspace_folders then
@@ -983,25 +998,3 @@ vim.keymap.set('n', '<leader>mt', function()
   vim.cmd 'tabnew' -- Open a new tab
   vim.api.nvim_buf_set_lines(0, 0, -1, false, content) -- Set new buffer content
 end, { noremap = true, silent = true })
-
--- docker settings --
-require('lspconfig').docker_compose_language_service.setup {
-  cmd = { 'docker-compose-langserver', '--stdio' },
-  filetypes = { 'yaml.docker-compose' },
-  root_dir = function(fname)
-    return require('lspconfig.util').find_git_ancestor(fname) or vim.loop.cwd()
-  end,
-}
-
-require('lspconfig').pylsp.setup {
-  settings = {
-    pylsp = {
-      plugins = {
-        pycodestyle = {
-          ignore = { 'W391' },
-          maxLineLength = 100,
-        },
-      },
-    },
-  },
-}
