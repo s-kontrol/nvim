@@ -606,12 +606,25 @@ require('lazy').setup({
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
-
-        stylua = {}, -- Used to format Lua code
-
-        -- Special Lua Config, as recommended by neovim help docs
         --
         pylsp = {
+          settings = {
+            pylsp = {
+              plugins = {
+                pycodestyle = { ignore = { 'W391' }, maxLineLength = 100 },
+              },
+            },
+          },
+        },
+        docker_compose_language_service = {
+          filetypes = { 'yaml.docker-compose' },
+          -- Note: 'cmd' and 'root_dir' are usually handled automatically by the native config,
+          -- but you can keep them if you need overrides.
+        },
+        lua_ls = {
+          -- cmd = { ... },
+          -- filetypes = { ... },
+          -- capabilities = {},
           settings = {
             pylsp = {
               plugins = {
@@ -663,9 +676,6 @@ require('lazy').setup({
       -- You can press `g?` for help in this menu.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        -- You can add other tools here that you want Mason to install
-        'stylua', -- Used to format Lua code
-        'ansiblels', -- ansible
         { 'bash-language-server', auto_update = true },
         {
           'gopls',
@@ -688,11 +698,22 @@ require('lazy').setup({
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-      for name, server in pairs(servers) do
-        server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-        vim.lsp.config(name, server)
-        vim.lsp.enable(name)
-      end
+      require('mason-lspconfig').setup {
+        ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
+        automatic_installation = false,
+        handlers = {
+          function(server_name)
+            local server = servers[server_name] or {}
+            -- This handles overriding only values explicitly passed
+            -- by the server configuration above. Useful when disabling
+            -- certain features of an LSP (for example, turning off formatting for ts_ls)
+            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+            -- require('lspconfig')[server_name].setup(server)
+            vim.lsp.config(server_name, server)
+            vim.lsp.enable(server_name)
+          end,
+        },
+      }
     end,
   },
 
