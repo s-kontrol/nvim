@@ -679,15 +679,11 @@ require('lazy').setup({
         { 'bash-language-server', auto_update = true },
         {
           'gopls',
-          condition = function()
-            return vim.fn.executable 'go' == 1
-          end,
+          condition = function() return vim.fn.executable 'go' == 1 end,
         },
         {
           'powershell_es',
-          condition = function()
-            return vim.fn.executable 'pwsh' == 1
-          end,
+          condition = function() return vim.fn.executable 'pwsh' == 1 end,
         },
         -- no extra requirement list
         'ansiblels', -- ansible
@@ -916,15 +912,40 @@ require('lazy').setup({
 
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    build = ':TSUpdate',
     config = function()
-      local filetypes = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
-      require('nvim-treesitter').install(filetypes)
-      vim.api.nvim_create_autocmd('FileType', {
-        pattern = filetypes,
-        callback = function() vim.treesitter.start() end,
-      })
+      -- We use the 'configs' module to set up Treesitter properly
+      local configs = require 'nvim-treesitter.configs'
+
+      configs.setup {
+        -- A list of parser names, or "all"
+        ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'yaml' },
+
+        -- Install parsers synchronously (only applied to `ensure_installed`)
+        sync_install = false,
+
+        -- Automatically install missing parsers when entering: useful for Docker/new environments
+        auto_install = true,
+
+        highlight = {
+          enable = true, -- This replaces your manual vim.treesitter.start()
+        },
+        indent = { enable = true },
+      }
     end,
   },
+  --  { -- Highlight, edit, and navigate code
+  --    'nvim-treesitter/nvim-treesitter',
+  --    config = function()
+  --      local filetypes = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+  --
+  --      require('nvim-treesitter').install(filetypes)
+  --      vim.api.nvim_create_autocmd('FileType', {
+  --        pattern = filetypes,
+  --        callback = function() vim.treesitter.start() end,
+  --      })
+  --    end,
+  --  },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
@@ -987,13 +1008,19 @@ vim.o.termguicolors = true
 vim.cmd 'colorscheme vim'
 
 -- my custom keys
-vim.keymap.set('n', '<PageUp>', function()
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-u>', true, true, true), 'n', true)
-end, { desc = 'Page Up' })
+vim.keymap.set(
+  'n',
+  '<PageUp>',
+  function() vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-u>', true, true, true), 'n', true) end,
+  { desc = 'Page Up' }
+)
 
-vim.keymap.set('n', '<PageDown>', function()
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-d>', true, true, true), 'n', true)
-end, { desc = 'Page Down' })
+vim.keymap.set(
+  'n',
+  '<PageDown>',
+  function() vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-d>', true, true, true), 'n', true) end,
+  { desc = 'Page Down' }
+)
 
 -- Map Ctrl+S to save the current file in insert mode and normal mode
 vim.api.nvim_set_keymap('i', '<C-s>', '<Esc>:w<CR>a', { noremap = true, silent = true })
