@@ -602,6 +602,7 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         gopls = {},
+        bashls = {},
         powershell_es = {},
         dockerls = {},
         pyright = {},
