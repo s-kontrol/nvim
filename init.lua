@@ -980,3 +980,4 @@ vim.api.nvim_set_keymap('n', '<C-s>', '<Esc>:w<CR>', { noremap = true, silent = 
 vim.api.nvim_set_hl(0, '@function', { fg = '#EBCB8B', bold = true })
 vim.api.nvim_set_hl(0, '@function.builtin', { fg = '#EBCB8B' })
 vim.api.nvim_set_hl(0, '@method', { fg = '#EBCB8B' })
+vim.api.nvim_set_hl(0, '@type', { fg = '#82AAFF', italic = true })
