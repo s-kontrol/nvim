@@ -878,7 +878,7 @@ require('lazy').setup({
     branch = 'main',
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter-intro`
     config = function()
-      local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+      local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'go', 'yaml' }
       require('nvim-treesitter').install(parsers)
       vim.api.nvim_create_autocmd('FileType', {
         callback = function(args)
@@ -975,3 +975,8 @@ vim.keymap.set(
 -- Map Ctrl+S to save the current file in insert mode and normal mode
 vim.api.nvim_set_keymap('i', '<C-s>', '<Esc>:w<CR>a', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<C-s>', '<Esc>:w<CR>', { noremap = true, silent = true })
+
+-- This works for most modern Neovim setups
+vim.api.nvim_set_hl(0, '@function', { fg = '#EBCB8B', bold = true })
+vim.api.nvim_set_hl(0, '@function.builtin', { fg = '#EBCB8B' })
+vim.api.nvim_set_hl(0, '@method', { fg = '#EBCB8B' })
