@@ -601,8 +601,11 @@ require('lazy').setup({
       ---@type table<string, vim.lsp.Config>
       local servers = {
         -- clangd = {},
-        -- gopls = {},
-        -- pyright = {},
+        gopls = {},
+        powershell_es = {},
+        dockerls = {},
+        pyright = {},
+        ansiblels = {},
         -- rust_analyzer = {},
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -950,3 +953,24 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+--
+--
+
+-- my custom keys
+vim.keymap.set(
+  'n',
+  '<PageUp>',
+  function() vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-u>', true, true, true), 'n', true) end,
+  { desc = 'Page Up' }
+)
+
+vim.keymap.set(
+  'n',
+  '<PageDown>',
+  function() vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-d>', true, true, true), 'n', true) end,
+  { desc = 'Page Down' }
+)
+
+-- Map Ctrl+S to save the current file in insert mode and normal mode
+vim.api.nvim_set_keymap('i', '<C-s>', '<Esc>:w<CR>a', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<C-s>', '<Esc>:w<CR>', { noremap = true, silent = true })
