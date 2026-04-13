@@ -607,6 +607,7 @@ require('lazy').setup({
         dockerls = {},
         pyright = {},
         ansiblels = {},
+        terraformls = {},
         -- rust_analyzer = {},
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
