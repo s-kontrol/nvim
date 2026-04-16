@@ -608,6 +608,7 @@ require('lazy').setup({
         pyright = {},
         ansiblels = {},
         terraformls = {},
+        bicep = {},
         -- rust_analyzer = {},
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -982,3 +983,19 @@ vim.api.nvim_set_hl(0, '@function', { fg = '#EBCB8B', bold = true })
 vim.api.nvim_set_hl(0, '@function.builtin', { fg = '#EBCB8B' })
 vim.api.nvim_set_hl(0, '@method', { fg = '#EBCB8B' })
 vim.api.nvim_set_hl(0, '@type', { fg = '#82AAFF', italic = true })
+
+-- Ensure Neovim 0.12 recognizes the filetype natively
+vim.filetype.add { extension = { bicep = 'bicep' } }
+
+-- Native 0.12 server registration
+vim.lsp.config('bicep', {
+  -- Point directly to the Mason wrapper script
+  cmd = { vim.fn.expand '~/.local/share/nvim/mason/bin/bicep-lsp' },
+  filetypes = { 'bicep', 'bicep-params' },
+  root_markers = { '.git', 'bicepconfig.json' },
+  -- 0.12 explicitly requires this flag to attach to files without a root marker
+  workspace_required = false,
+})
+
+-- Enable it natively
+vim.lsp.enable 'bicep'
