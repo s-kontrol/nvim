@@ -985,8 +985,9 @@ vim.api.nvim_set_hl(0, '@method', { fg = '#EBCB8B' })
 vim.api.nvim_set_hl(0, '@type', { fg = '#82AAFF', italic = true })
 
 -- Ensure Neovim 0.12 recognizes the filetype natively
-vim.filetype.add { extension = { bicep = 'bicep' } }
+vim.filetype.add { extension = { bicep = 'bicep', bicepparam = 'bicepparam' } }
 
+pcall(vim.treesitter.language.register, 'bicep', 'bicepparam')
 -- Native 0.12 server registration
 vim.lsp.config('bicep', {
   -- Point directly to the Mason wrapper script
